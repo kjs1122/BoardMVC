@@ -15,9 +15,9 @@
 	}
 	
 	window.close();
-
+	
 </script>
-
+	
 
 </head>
 <body>

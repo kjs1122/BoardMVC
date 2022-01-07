@@ -2,6 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+	int listcount = (Integer)request.getAttribute("listCount");
+	int maxPage = (Integer)request.getAttribute("maxPage");
+	int startPage = (Integer)request.getAttribute("startPage");
+	int endPage = (Integer)request.getAttribute("endPage");
+	int nowPage = (Integer)request.getAttribute("page");
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +40,28 @@
 		<td>${board.readcount}</td>
 	</tr>
 	</c:forEach>
+	<tr align="center" height="20">
+		<td colspan="5">
+			<%if(nowPage <= 1) {%>
+				[이전]&nbsp;
+			<%} else { %>		
+				<a href="/BoardServlet?command=board_list&page=<%= nowPage -1%>">[이전]</a>&nbsp;
+			<%} %>
+			<%for(int a = startPage; a <= endPage; a++ ) 
+				if(a == nowPage) {
+			%>
+				[<%=a%>]
+				<%} else { %>		
+				<a href="/BoardServlet?command=board_list&page=<%=a%>">[<%=a%>]</a>&nbsp;	
+				<%} %>
+			<%if(nowPage>=maxPage) {%>		
+				[다음]				
+			<%} else { %>
+				<a href="/BoardServlet?command=board_list&page=<%= nowPage +1%>">[다음]</a>
+			<%} %>
+	
+	
+	
 	</table>
 </div>
 </body>

@@ -19,9 +19,38 @@ public class BoardListAction implements Action {
 		String url = "/board/boardList.jsp";
 		BoardDAO bDao = BoardDAO.getInstance();
 		
-		List<BoardVO> boardList = bDao.selectAllBoards();
+		
+		int page = 1;
+		int limit = 10;
+		
+		if(request.getParameter("page") != null) {
+			page = Integer.parseInt(request.getParameter("page"));
+			
+		}
+		int listCount = bDao.getListCount(); //총 게시물 개수
+		
+		List<BoardVO> boardList = bDao.getBoardList(page,limit);
+		
+		
+		int maxPage = listCount % 10 != 0 ? listCount / 10 + 1 : listCount / 10;
+//		int maxPage = (int)((double)(listCount/limit + 0.95)); // 총 페이지 개수
+		
+		int startPage = (((int) ((double)page / 10 + 0.9)) - 1) * 10 + 1; 
+		int endPage = startPage + 10 - 1;
+		
+		if(endPage > maxPage) {
+			endPage = maxPage;
+		}
+		
+		request.setAttribute("startPage", startPage);
+		request.setAttribute("endPage", endPage);
+		request.setAttribute("maxPage", maxPage);
+		request.setAttribute("listCount", listCount);
+		request.setAttribute("page", page);
+		
+//		List<BoardVO> boardList = bDao.selectAllBoards();
 		request.setAttribute("boardList", boardList);
-		request.getRequestDispatcher(url).forward(request, response);
+		request.getRequestDispatcher(url).forward(request, response); 
 	}
 
 }
